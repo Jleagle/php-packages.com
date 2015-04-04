@@ -1,0 +1,34 @@
+{
+  "license":      "BSD-3-Clause",
+  "require":      {
+    "cubex/framework":              "~2.1",
+    "packaged/dispatch":            "~1.0",
+    "stack/builder":                "~1.0",
+    "forxer/Gravatar":              "~1.2",
+    "illuminate/database":          "~4.0",
+    "packaged/form":                "~0.1",
+    "jleagle/html-builder":         "~0.0",
+    "jleagle/packagist-api-client": "~0.0",
+    "jleagle/app-engine-stubs":     "*",
+    "behat/transliterator":         "~1.0"
+  },
+  "autoload":     {
+    "psr-4": {
+      "Jleagle\\Packages\\": "src/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url":  "git@github.com:jleagle/app-engine-stubs.git"
+    },
+    {
+      "type": "vcs",
+      "url":  "git@github.com:jleagle/html-builder.git"
+    },
+    {
+      "type": "vcs",
+      "url":  "git@github.com:jleagle/packagist-api-client.git"
+    }
+  ]
+}

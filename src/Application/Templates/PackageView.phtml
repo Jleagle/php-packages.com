@@ -1,0 +1,70 @@
+<?php
+/**
+ * @var Jleagle\Packages\Application\Views\PackageView $this
+ */
+
+use forxer\Gravatar\Gravatar;
+?>
+
+<div class="page-header">
+  <h1><?=$this->getPackage()->author?> / <?=$this->getPackage()->name?> <small><?=$this->getPackage()->type?></small></h1>
+  <div><?=$this->getPackage()->description?></div>
+</div>
+
+<div class="row">
+  <div class="col-xs-4">
+    <div class="list-group">
+      <span class="list-group-item active">Links</span>
+      <a target="_blank" href="https://packagist.org/packages/<?= $this->getPackage()->full_name?>" class="list-group-item">Packagist</a>
+      <a target="_blank" href="<?= $this->getRepoUrl() ?>" class="list-group-item">Repository</a>
+      <a href="/package/update/<?= $this->getPackage()->full_name?>" class="list-group-item">Updated <?= $this->getPackage()->last_updated ?></a>
+    </div>
+    <div id="tags">
+      <?php foreach($this->getPackage()->tags as $tag){ ?>
+        <a class="btn btn-primary" href="/?tags=<?= $tag->id ?>"><?= $tag->name ?></a>
+      <?php } ?>
+    </div>
+  </div>
+  <div class="col-xs-4">
+    <div class="list-group" id="author-list">
+      <span class="list-group-item active">Authors</span>
+      <?php foreach($this->getPackage()->authors as $author){ ?>
+        <a href="/?authors=<?= $author->id ?>" class="list-group-item">
+          <img src="<?= Gravatar::image($author->email, 40, 'mm', null, 'png', false)?>" />
+          <span><?= $author->name ?> <?= $author->role?'('.$author->role.')':'' ?></span>
+        </a>
+      <?php } ?>
+    </div>
+  </div>
+  <div class="col-xs-4">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5468884371420326" data-ad-slot="8161287291" data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<h2>Uses</h2>
+<div class="row">
+  <?php foreach($this->getPackage()->dependencies->toArray() as $v){ ?>
+    <div class="col-xs-12 col-sm-6">
+      <?= $this->getPackageInclude($v) ?>
+    </div>
+  <?php } ?>
+</div>
+
+<?php if (!$this->getPackage()->dependencies->toArray()){ ?>
+  <p>This package has no dependencies.</p>
+<?php } ?>
+
+<h2>Used by</h2>
+<div class="row">
+  <?php foreach($this->getPackage()->packages->toArray() as $v){ ?>
+  <div class="col-xs-12 col-sm-6">
+    <?= $this->getPackageInclude($v) ?>
+  </div>
+  <?php } ?>
+</div>
+
+<?php if (!$this->getPackage()->packages->toArray()){ ?>
+  <p>This package is not used by any others.</p>
+<?php } ?>

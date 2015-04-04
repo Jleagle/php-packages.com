@@ -1,0 +1,28 @@
+<?php
+/**
+ * @var Jleagle\Packages\Application\Views\SearchView $this
+ */
+?>
+
+<h1>Search</h1>
+
+<div class="row">
+  <?= $this->getForm() ?>
+</div>
+
+<?= $this->getPagination() ?>
+
+<div class="row">
+  <?php
+  foreach($this->getPackages() as $package)
+  {
+    ?>
+    <div class="col-xs-12 col-sm-6">
+      <?= $this->getPackageInclude($package) ?>
+    </div>
+    <?php
+  }
+  ?>
+</div>
+
+<?= $this->getPagination() ?>

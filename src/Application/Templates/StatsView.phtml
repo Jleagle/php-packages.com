@@ -1,0 +1,95 @@
+<?php
+/**
+ * @var Jleagle\Packages\Application\Views\StatsView $this
+ */
+?>
+
+<h1>Stats</h1>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div id="chart"></div>
+  </div>
+  <div class="col-xs-6">
+    <h3>Types</h3>
+    <table class="table">
+      <?php foreach($this->getTypes() as $type){ ?>
+        <tr>
+          <td><a href="/?types=<?= $type['type'] ?>"><?= $type['type'] ?></a></td>
+          <td><?= number_format($type['count']) ?></td>
+        </tr>
+      <?php } ?>
+    </table>
+  </div>
+  <div class="col-xs-6">
+    <h3>Hosts</h3>
+    <table class="table">
+      <?php foreach($this->getDomains() as $domain) { ?>
+        <tr>
+          <td><a href="http://<?= $domain['domain'] ?>" target="_blank"><?= $domain['domain'] ?></a></td>
+          <td><?= number_format($domain['count']) ?></td>
+        </tr>
+      <?php } ?>
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1.1", {packages: ['corechart']});
+  google.setOnLoadCallback(drawCharts);
+
+  function drawCharts()
+  {
+    var data = google.visualization.arrayToDataTable(<?= $this->getLineStats() ?>);
+
+    var options = {
+      title:           '',
+      curveType:       "function",
+      chartArea:       {
+        width: "90%", heigh: "100%"
+      },
+      backgroundColor: {
+        fill: "transparent"
+      },
+      legend:          {
+        position: "bottom",
+        textStyle:{
+          color: '#333'
+        }
+      },
+      series:          [
+        {
+          targetAxisIndex: 0, color: "#337ab7"
+        },
+        {
+          targetAxisIndex: 1, color: "#5cb85c"
+        },
+        {
+          targetAxisIndex: 2, color: "#d9534f"
+        }
+      ],
+      hAxis:           {
+        textPosition: 'none'
+      },
+      vAxes:           [
+        {
+          // Left axis
+          textStyle:{
+            color: '#333'
+          }
+        },
+        {
+          // Right axis
+          textStyle:{
+            color: '#333'
+          },
+          viewWindow:   { min: 0 }
+        }
+      ]
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('chart'));
+    chart.draw(data, options);
+  }
+</script>

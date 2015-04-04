@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Cubex Console Application
+ */
+//Defining PHP_START will allow cubex to add an execution time header
+define('PHP_START', microtime(true));
+
+//These values are set for support within HHVM
+defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
+defined('STDERR') or define('STDERR', fopen('php://stderr', 'w'));
+
+//Include the composer autoloader
+require_once __DIR__ . '/vendor/autoload.php';
+
+//Create an instance of cubex, with the bin root defined
+$app = new \Cubex\Cubex(__DIR__ . DIRECTORY_SEPARATOR . 'public/');
+
+//Boot Cubex
+$app->boot();
+
+//Create a request object
+$request = \Cubex\Http\Request::createConsoleRequest();
+$app->instance('request', $request);
+
+//Create a new console application
+$console = \Cubex\Console\Console::withCubex($app);
+
+//Execute the command and retrieve the exit code
+$exit = $console->run();
+
+$app->shutdown();
+
+exit($exit);
