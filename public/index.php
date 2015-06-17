@@ -5,6 +5,8 @@ define('PHP_START', microtime(true));
 //Include the composer autoloader
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+\Packaged\Helpers\PackagedHelpers::includeGlobalFunctions();
+
 // Set correct enviroment
 if(isset($_SERVER['APPLICATION_ID']) && $_SERVER['APPLICATION_ID'] == 'dev~php-packages-com')
 {

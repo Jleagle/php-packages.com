@@ -6,24 +6,25 @@ use Packaged\Form\Form;
 class SearchForm extends Form
 {
   /**
-   * @type hidden
+   * @type text
    */
-  public $types;
-
-  /**
-   * @type hidden
-   */
-  public $tags;
-
+  public $search;
   /**
    * @type hidden
    */
   public $authors;
-
   /**
-   * @type text
+   * @type hidden
    */
-  public $search;
+  public $maintainers;
+  /**
+   * @type hidden
+   */
+  public $types;
+  /**
+   * @type hidden
+   */
+  public $tags;
 
   /**
    * @type select

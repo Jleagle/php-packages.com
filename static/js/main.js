@@ -149,6 +149,54 @@ $("input#authors").select2(
   }
 );
 
+$("input#maintainers").select2(
+  {
+    multiple:           true,
+    placeholder:        "Maintainers",
+    minimumInputLength: 2,
+    openOnEnter:        false,
+    ajax:               {
+      url:         "/search/maintainers",
+      dataType:    'json',
+      quietMillis: 200,
+      data:        function (term, page)
+      {
+        return {
+          page:   page,
+          search: term
+        };
+      },
+      results:     function (data, page)
+      {
+        return {
+          results: data.results,
+          more:    (page < data.lastPage)
+        };
+      }
+    },
+    initSelection:      function (element, callback)
+    {
+      var ids = $(element).val();
+      if (ids !== "")
+      {
+        $.ajax(
+          "/search/maintainers-init", {
+            dataType: "json",
+            data:     {
+              ids: ids
+            }
+          }
+        ).done(
+          function (data)
+          {
+            callback(data);
+          }
+        );
+      }
+    }
+  }
+);
+
 $("#results").highlight(
   'search', {
     caseSensitive: false,

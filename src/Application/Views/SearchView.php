@@ -49,12 +49,19 @@ class SearchView extends BaseView
 
     $form->getElement('types')
       ->setAttributes(['class' => 'form-control', 'id' => 'types']);
+
     $form->getElement('tags')
       ->setAttributes(['class' => 'form-control', 'id' => 'tags']);
+
     $form->getElement('search')
       ->setAttributes(['class' => 'form-control', 'placeholder' => 'Search']);
+
     $form->getElement('authors')
       ->setAttributes(['class' => 'form-control', 'id' => 'authors']);
+
+    $form->getElement('maintainers')
+      ->setAttributes(['class' => 'form-control', 'id' => 'maintainers']);
+
     $form->getElement('order')
       ->setAttributes(['class' => 'form-control'])
       ->setOption('values', $orders);

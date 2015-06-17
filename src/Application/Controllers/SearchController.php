@@ -3,21 +3,25 @@ namespace Jleagle\Packages\Application\Controllers;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Jleagle\Packages\Application\Models\Author;
+use Jleagle\Packages\Application\Models\Maintainer;
 use Jleagle\Packages\Application\Models\Package;
 use Jleagle\Packages\Application\Models\Tag;
 use Jleagle\Packages\Application\Views\SearchView;
+use Packaged\Helpers\Arrays;
 
 class SearchController extends BaseController
 {
   public function getRoutes()
   {
     return [
-      ''             => 'searchx',
-      'types'        => 'ajaxSearchPackageTypes',
-      'tags'         => 'ajaxSearchTags',
-      'tags-init'    => 'ajaxSearchTagsInit',
-      'authors'      => 'ajaxSearchAuthors',
-      'authors-init' => 'ajaxSearchAuthorsInit',
+      ''                 => 'searchx',
+      'types'            => 'ajaxSearchPackageTypes',
+      'tags'             => 'ajaxSearchTags',
+      'tags-init'        => 'ajaxSearchTagsInit',
+      'authors'          => 'ajaxSearchAuthors',
+      'authors-init'     => 'ajaxSearchAuthorsInit',
+      'maintainers'      => 'ajaxSearchMaintainers',
+      'maintainers-init' => 'ajaxSearchMaintainersInit',
     ];
   }
 
@@ -28,12 +32,12 @@ class SearchController extends BaseController
   {
     // Get post data
     $data = $this->_getRequest()->query->all();
-    $data['types'] = idx($data, 'types', '');
-    $data['tags'] = idx($data, 'tags', '');
-    $data['search'] = idx($data, 'search', '');
-    $data['authors'] = idx($data, 'authors', '');
-    $data['order'] = idx($data, 'order', 'downloads');
-    $data['page'] = idx($data, 'page', 1);
+    $data['types'] = Arrays::value($data, 'types', '');
+    $data['tags'] = Arrays::value($data, 'tags', '');
+    $data['search'] = Arrays::value($data, 'search', '');
+    $data['authors'] = Arrays::value($data, 'authors', '');
+    $data['order'] = Arrays::value($data, 'order', 'downloads');
+    $data['page'] = Arrays::value($data, 'page', 1);
     ksort($data);
 
     // Cache
@@ -100,6 +104,21 @@ class SearchController extends BaseController
         $packages->whereIn('id', $packageIds);
       }
 
+      // Maintainers
+      if($data['maintainers'])
+      {
+        $maintainers = explode(',', $data['maintainers']);
+        $maintainers = array_map('trim', $maintainers);
+        $maintainers = array_filter($maintainers, 'is_numeric');
+        $maintainers = implode(',', $maintainers);
+        $maintainers = DB::select(
+          'SELECT package_id FROM maintainer_package WHERE maintainer_id IN(' . $maintainers . ') GROUP BY package_id'
+        );
+
+        $packageIds = ipull($maintainers, 'package_id');
+        $packages->whereIn('id', $packageIds);
+      }
+
       // Order
       if(in_array($data['order'], ['name', 'author']))
       {
@@ -130,7 +149,7 @@ class SearchController extends BaseController
   public function ajaxSearchPackageTypes()
   {
     $data = $this->_getRequest()->query->all();
-    $type = idx($data, 'search', '');
+    $type = Arrays::value($data, 'search', '');
 
     $memcache = new \Memcached;
     $key = 'searchTypes-' . $type;
@@ -167,7 +186,7 @@ class SearchController extends BaseController
   public function ajaxSearchTags()
   {
     $data = $this->_getRequest()->query->all();
-    $name = idx($data, 'search', '');
+    $name = Arrays::value($data, 'search', '');
 
     $memcache = new \Memcached;
     $key = 'searchTags-' . $name;
@@ -203,7 +222,7 @@ class SearchController extends BaseController
   {
     $data = $this->_getRequest()->query->all();
 
-    $ids = idx($data, 'ids', '');
+    $ids = Arrays::value($data, 'ids', '');
     $ids = explode(',', $ids);
     $ids = array_filter($ids);
     asort($ids);
@@ -242,7 +261,7 @@ class SearchController extends BaseController
   public function ajaxSearchAuthors()
   {
     $data = $this->_getRequest()->query->all();
-    $name = idx($data, 'search', '');
+    $name = Arrays::value($data, 'search', '');
 
     $memcache = new \Memcached;
     $key = 'searchAuthors-' . $name;
@@ -276,7 +295,7 @@ class SearchController extends BaseController
   public function ajaxSearchAuthorsInit()
   {
     $data = $this->_getRequest()->query->all();
-    $ids = idx($data, 'ids', '');
+    $ids = Arrays::value($data, 'ids', '');
     $ids = explode(',', $ids);
     $ids = array_filter($ids);
     asort($ids);
@@ -310,5 +329,78 @@ class SearchController extends BaseController
     }
 
     return $searchAuthorsInit;
+  }
+
+  public function ajaxSearchMaintainers()
+  {
+    $data = $this->_getRequest()->query->all();
+    $name = Arrays::value($data, 'search', '');
+
+    $memcache = new \Memcached;
+    $key = 'searchMaintainers-' . $name;
+    $searchMaintainers = $memcache->get($key);
+    if($searchMaintainers === false)
+    {
+      $paginate = Maintainer
+        ::select('id', 'name')
+        ->where('name', 'like', '%' . $name . '%')
+        ->orderBy('name', 'asc')
+        ->get();
+
+      $searchMaintainers = [];
+      foreach($paginate as $item)
+      {
+        $searchMaintainers[] = [
+          'id'   => $item->id,
+          'text' => $item->name,
+        ];
+      }
+
+      $memcache->set($key, $searchMaintainers, self::WEEK);
+    }
+
+    return [
+      'results'  => $searchMaintainers,
+      'lastPage' => 1,
+    ];
+  }
+
+  public function ajaxSearchMaintainersInit()
+  {
+    $data = $this->_getRequest()->query->all();
+    $ids = Arrays::value($data, 'ids', '');
+    $ids = explode(',', $ids);
+    $ids = array_filter($ids);
+    asort($ids);
+
+    $memcache = new \Memcached;
+    $key = 'searchMaintainersInit-' . implode('-', $ids);
+    $searchMaintainersInit = $memcache->get($key);
+    if($searchMaintainersInit === false)
+    {
+      if(!$ids)
+      {
+        return [];
+      }
+
+      $authors = Maintainer
+        ::select('id', 'name')
+        ->whereIn('id', $ids)
+        ->orderBy('name', 'asc')
+        ->get();
+
+      $searchMaintainersInit = [];
+      foreach($authors as $item)
+      {
+        $searchMaintainersInit[] = [
+          'id'   => $item->id,
+          'text' => $item->name,
+        ];
+      }
+
+      $memcache->set($key, $searchMaintainersInit, self::WEEK);
+    }
+
+    return $searchMaintainersInit;
   }
 }

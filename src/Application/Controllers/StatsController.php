@@ -10,11 +10,11 @@ class StatsController extends BaseController
 {
   public function defaultAction()
   {
+    // Line chart
     $memcache = new \Memcached;
     $stats1 = $memcache->get('stats1');
     if($stats1 === false)
     {
-      // Line
       $stats = Stat
         ::select(
           DB::raw('max(`packages`) as packages'),
@@ -40,6 +40,7 @@ class StatsController extends BaseController
       $memcache->set('stats1', $stats1, self::DAY);
     }
 
+    // Domain table
     $memcache = new \Memcached;
     $stats2 = $memcache->get('stats2');
     if($stats2 === false)
@@ -55,6 +56,7 @@ class StatsController extends BaseController
       $memcache->set('stats2', $stats2, self::DAY);
     }
 
+    // Types table
     $memcache = new \Memcached;
     $stats3 = $memcache->get('stats3');
     if($stats3 === false || true)
