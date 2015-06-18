@@ -36,7 +36,7 @@ class SearchController extends BaseController
     $data['tags'] = Arrays::value($data, 'tags', '');
     $data['search'] = Arrays::value($data, 'search', '');
     $data['authors'] = Arrays::value($data, 'authors', '');
-    $data['order'] = Arrays::value($data, 'order', 'downloads');
+    $data['order'] = Arrays::value($data, 'order', 'downloads_m');
     $data['page'] = Arrays::value($data, 'page', 1);
     ksort($data);
 
@@ -120,9 +120,27 @@ class SearchController extends BaseController
       }
 
       // Order
-      if(in_array($data['order'], ['name', 'author']))
+      switch($data['order'])
       {
-        $packages->orderBy($data['order'], 'asc');
+        case 'downloads_t':
+          $packages->orderBy('downloads', 'desc');
+          break;
+        case 'downloads_m':
+          $packages->orderBy('downloads_m', 'desc');
+          break;
+        case 'downloads_d':
+          $packages->orderBy('downloads_d', 'desc');
+          break;
+        case 'stars':
+          $packages->orderBy('stars', 'desc');
+          break;
+        case 'author':
+          $packages->orderBy('author', 'asc');
+          break;
+        case 'name':
+          $packages->orderBy('name', 'asc');
+          break;
+
       }
       $packages->orderBy('downloads_m', 'desc');
 

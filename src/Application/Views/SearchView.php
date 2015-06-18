@@ -33,9 +33,12 @@ class SearchView extends BaseView
     );
 
     $orders = [
-      'downloads' => 'Downloads',
-      'name'      => 'Name',
-      'author'    => 'Author',
+      'downloads_t' => 'Downloads (Total)',
+      'downloads_m' => 'Downloads (Month)',
+      'downloads_d' => 'Downloads (Day)',
+      'stars'       => 'Stars',
+      'author'      => 'Author',
+      'name'        => 'Package Name',
     ];
 
     $form = new SearchForm('/', 'get');
