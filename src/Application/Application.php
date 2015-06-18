@@ -42,7 +42,6 @@ class Application extends ApplicationKernel
       'stats'   => new StatsController(),
       'info'    => new InfoController(),
       'package' => new PackageController(),
-      ':xx'     => '/' // todo
     ];
   }
 }
