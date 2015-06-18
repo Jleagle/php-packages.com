@@ -17,7 +17,7 @@ use forxer\Gravatar\Gravatar;
       <span class="list-group-item active">Links</span>
       <a target="_blank" href="https://packagist.org/packages/<?= $this->getPackage()->full_name?>" class="list-group-item">Packagist</a>
       <a target="_blank" href="<?= $this->getRepoUrl() ?>" class="list-group-item">Repository</a>
-      <a href="/package/update/<?= $this->getPackage()->full_name?>" class="list-group-item">Updated <?= $this->getPackage()->last_updated ?></a>
+      <a href="/package/update/<?= $this->getPackage()->full_name?>" class="list-group-item" rel="nofollow">Updated <?= $this->getPackage()->last_updated ?></a>
     </div>
     <div id="tags">
       <?php foreach($this->getPackage()->tags as $tag){ ?>
