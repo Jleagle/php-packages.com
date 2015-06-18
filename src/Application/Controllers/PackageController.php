@@ -51,6 +51,8 @@ class PackageController extends BaseController
     $package->dependencies->sortByDesc('downloads_m');
     $package->packages->sortByDesc('downloads_m');
 
+    $this->_setTitle($package->author . ' / ' . $package->name);
+
     return new PackageView($package);
   }
 

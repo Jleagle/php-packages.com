@@ -2,7 +2,6 @@
 namespace Jleagle\Packages\Application\Controllers;
 
 use Cubex\View\LayoutController;
-use Jleagle\Packages\Application\Views\LayoutView;
 
 class BaseController extends LayoutController
 {
@@ -16,9 +15,12 @@ class BaseController extends LayoutController
 
   protected function _init()
   {
-    $this->setLayout(new LayoutView($this));
-
     $path = trim($this->_getRequest()->path(), '/');
     $this->layout()->setData('path', $path);
+  }
+
+  protected function _setTitle($title)
+  {
+    $this->layout()->setData('title', $title);
   }
 }

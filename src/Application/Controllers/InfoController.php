@@ -7,6 +7,8 @@ class InfoController extends BaseController
 {
   public function defaultAction()
   {
+    $this->_setTitle('Info');
+
     return new InfoView();
   }
 }

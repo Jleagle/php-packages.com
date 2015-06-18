@@ -8,45 +8,59 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Packages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A searchable database of PHP packages"/>
+  <meta name="keywords" content="php packages, php, packages">
+
+  <title><?php
+    $title = $this->getData('title', '');
+    echo 'PHP Packages' . ($title ? ' - ' . $title : '');
+    ?></title>
 
   <?= \Packaged\Dispatch\AssetManager::generateHtmlIncludes('css'); ?>
 
 </head>
 <body>
 
-  <nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container">
-
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <span class="navbar-brand">PHP-Packages</span>
-      </div>
-
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-        <ul class="nav navbar-nav">
-          <li class="<?= $this->getData('path') == ''?'active':'' ?>"><a href="/">Search</a></li>
-          <li class="<?= $this->getData('path') == 'stats'?'active':'' ?>"><a href="/stats">Stats</a></li>
-          <li class="<?= $this->getData('path') == 'info'?'active':'' ?>"><a href="/info">Info</a></li>
-        </ul>
-
-      </div>
-    </div>
-  </nav>
-
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
-    <?= $this->content() ?>
-  </div>
 
-  <?= \Packaged\Dispatch\AssetManager::generateHtmlIncludes('js'); ?>
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <span class="navbar-brand">PHP-Packages</span>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <ul class="nav navbar-nav">
+        <li class="<?= $this->getData('path') == '' ? 'active' : '' ?>">
+          <a href="/">Search</a>
+        </li>
+        <li class="<?= $this->getData('path') == 'stats' ? 'active' : '' ?>">
+          <a href="/stats">Stats</a>
+        </li>
+        <li class="<?= $this->getData('path') == 'info' ? 'active' : '' ?>">
+          <a href="/info">Info</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <?= $this->content() ?>
+</div>
+
+<?= \Packaged\Dispatch\AssetManager::generateHtmlIncludes('js'); ?>
 
 </body>
 </html>

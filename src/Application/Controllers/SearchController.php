@@ -161,6 +161,8 @@ class SearchController extends BaseController
       list($pages, $packages) = $search;
     }
 
+    $this->_setTitle('Search');
+
     return new SearchView($packages, $data, $pages);
   }
 

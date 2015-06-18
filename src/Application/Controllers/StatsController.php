@@ -73,6 +73,8 @@ class StatsController extends BaseController
       $memcache->set('stats3', $stats3, self::DAY);
     }
 
+    $this->_setTitle('Stats');
+
     return new StatsView($stats1, $stats2, $stats3);
   }
 }
