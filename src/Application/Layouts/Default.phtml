@@ -12,15 +12,7 @@
 
   <title>Packages</title>
 
-  <link media="all" type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <link media="all" type="text/css" rel="stylesheet" href="/static/css/jquery.select2.min.css">
-  <link media="all" type="text/css" rel="stylesheet" href="/static/css/jquery.select2-bootstrap.css">
-  <link media="all" type="text/css" rel="stylesheet" href="/static/css/main.css">
-
-  <!--[if lt IE 9]>
-  <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-  <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+  <?= \Packaged\Dispatch\AssetManager::generateHtmlIncludes('css'); ?>
 
 </head>
 <body>
@@ -54,11 +46,7 @@
     <?= $this->content() ?>
   </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  <script src="/static/js/jquery.select2.min.js"></script>
-  <script src="/static/js/jquery.highlight.js"></script>
-  <script src="/static/js/main.js"></script>
+  <?= \Packaged\Dispatch\AssetManager::generateHtmlIncludes('js'); ?>
 
 </body>
 </html>
