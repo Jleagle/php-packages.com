@@ -105,7 +105,7 @@ class SearchController extends BaseController
       }
 
       // Maintainers
-      if($data['maintainers'])
+      if(isset($data['maintainers']) && $data['maintainers'])
       {
         $maintainers = explode(',', $data['maintainers']);
         $maintainers = array_map('trim', $maintainers);
@@ -140,7 +140,6 @@ class SearchController extends BaseController
         case 'name':
           $packages->orderBy('name', 'asc');
           break;
-
       }
       $packages->orderBy('downloads_m', 'desc');
 
